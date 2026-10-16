@@ -37,6 +37,20 @@
       </article>
     </section>
 
+    <section class="access" id="acceso">
+      <span class="access-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+      </span>
+      <div class="access-text">
+        <h3 data-i18n="siteAccessTitle"></h3>
+        <p class="muted" data-i18n="siteAccessBody"></p>
+      </div>
+      <div class="access-side">
+        <span class="pill" data-access="state"><i></i><span></span></span>
+        <button class="btn primary" type="button" data-access="grant" data-i18n="siteAccessGrant"></button>
+      </div>
+    </section>
+
     <!-- Editor del deck -->
     <section class="editor" id="deck">
       <div class="ed-head">
@@ -170,6 +184,17 @@
     <section class="group">
       <h2 data-i18n="secGeneral"></h2>
       <div class="panel">
+        <div class="row" id="access-row">
+          <div>
+            <div class="row-title" data-i18n="siteAccessTitle"></div>
+            <div class="row-sub muted" data-access="sub"></div>
+          </div>
+          <div class="access-actions">
+            <span class="pill" data-access="state"><i></i><span></span></span>
+            <button class="btn primary" type="button" data-access="grant" data-i18n="siteAccessGrant"></button>
+            <button class="btn ghost" type="button" data-access="remove" data-i18n="siteAccessRemove" hidden></button>
+          </div>
+        </div>
         <label class="row">
           <div>
             <div class="row-title" data-i18n="followActive"></div>

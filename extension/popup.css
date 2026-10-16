@@ -133,6 +133,14 @@ main {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.access {
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.access-title { display: block; font-weight: 600; }
+.access-sub { display: block; margin-top: 2px; font-size: 12px; line-height: 1.35; }
+.access .btn { align-self: flex-start; }
+
 .target .btn { align-self: flex-start; background: var(--bg); }
 .target .btn:hover { background: var(--surface-2); }
 

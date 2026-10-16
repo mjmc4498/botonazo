@@ -3,6 +3,22 @@
 Todas las versiones de la extensión Botonazo. El número de versión de cada paquete
 debe ser mayor que el anterior para que la Chrome Web Store lo acepte.
 
+## 1.1.0 — 15 de octubre de 2026
+
+- **Acceso a los sitios opcional.** El paquete ya no declara `host_permissions`:
+  pide `activeTab` y `<all_urls>` como `optional_host_permissions`, que se concede
+  una sola vez con «Permitir en todos los sitios» desde la bienvenida, desde
+  **Ajustes › General** (donde también se puede quitar) o desde el panel del QR,
+  con el estado y una explicación de para qué sirve.
+- Sin ese permiso, las capturas, los carteles y avisos, el texto, los atajos, la
+  multimedia y los webhooks responden en el celular «Permite el acceso a los
+  sitios en el panel de Botonazo», en lugar de un error genérico. La pestaña
+  controlada muestra el mismo aviso y la lista de pestañas numera las pestañas
+  («Pestaña 1», «Pestaña 2»…) porque Chrome oculta sus títulos. OBS, pestañas,
+  ventanas, zoom y la grabación de la pestaña siguen funcionando igual.
+- La prueba de punta a punta (79 comprobaciones) también verifica el caso sin
+  permiso.
+
 ## 1.0.0 — 15 de octubre de 2026
 
 Primera versión.

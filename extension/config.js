@@ -19,6 +19,16 @@ export const FALLBACK_ICE = {
   iceServers: [{ urls: 'stun:stun.cloudflare.com:3478' }, { urls: 'stun:stun.l.google.com:19302' }],
 };
 
+// Acceso a los sitios: permiso opcional que el usuario concede una sola vez desde el
+// editor o el panel. Los botones se pulsan en el celular, sin tocar la computadora,
+// así que activeTab (la pestaña donde se abrió el panel) no alcanza.
+export const SITE_ACCESS = { origins: ['<all_urls>'] };
+
+export const hasSiteAccess = () => chrome.permissions.contains(SITE_ACCESS);
+
+// Chrome solo muestra su diálogo si se llama directamente desde un clic del usuario.
+export const requestSiteAccess = () => chrome.permissions.request(SITE_ACCESS).catch(() => false);
+
 export const DEFAULT_SETTINGS = {
   remoteUrl: '',
   followActiveTab: true,

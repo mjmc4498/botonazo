@@ -6,7 +6,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.0.0';
+  const VERSION = '1.1.0';
 
   // Worker de Cloudflare que entrega credenciales temporales de retransmisión (TURN)
   // para redes que bloquean la conexión directa.
@@ -45,6 +45,7 @@
     noTabs: 'No hay pestañas abiertas',
     window: 'Ventana',
     chromePage: 'Página de Chrome',
+    hiddenSite: 'Sin acceso al sitio',
     live: 'En vivo', preview: 'Vista previa',
     mirrorWait: 'Conectando con la pantalla…',
     mirrorEnded: 'La pantalla en vivo terminó',
@@ -417,6 +418,8 @@
       return;
     }
     const nodes = [];
+    // Aviso de la extensión, p. ej. cuando falta el acceso a los sitios y no hay títulos.
+    if (typeof msg.note === 'string' && msg.note) nodes.push(Object.assign(document.createElement('li'), { className: 'tabs-note', textContent: msg.note }));
     let win = 0;
     for (const tab of tabs) {
       if (msg.windows > 1 && tab.win !== win) {
@@ -442,7 +445,7 @@
       const th = document.createElement('span');
       th.className = 'tab-host';
       if (tab.audible || tab.muted) th.append(svgIcon(tab.muted ? UI_ICONS.mute : UI_ICONS.volume));
-      th.append(document.createTextNode(host || t('chromePage')));
+      th.append(document.createTextNode(host || t(tab.hidden ? 'hiddenSite' : 'chromePage')));
       text.append(tt, th);
       open.append(avatar, text);
       open.addEventListener('click', () => {
@@ -721,6 +724,12 @@
 
   function setTarget(info) {
     const el = $('#target');
+    // Sin acceso a los sitios la extensión envía el aviso en lugar del título.
+    if (info && info.access === false) {
+      el.classList.add('warn');
+      $('#target-title').textContent = String(info.title || '');
+      return;
+    }
     if (!info || !info.title) {
       el.classList.toggle('warn', !!info && info.ok === false);
       $('#target-title').textContent = info && info.ok === false ? t('restricted') : '';

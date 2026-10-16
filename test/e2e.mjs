@@ -10,14 +10,18 @@ import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer';
 
 import { startObsMock } from './obs-mock.mjs';
+import { copyExtension, grantSiteAccess } from './site-access.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const EXT = path.join(ROOT, 'extension');
 const BASE = process.env.BASE || 'http://localhost:8766';
 const OUT = process.env.OUT || path.join(ROOT, 'test', 'out');
 const DL = path.join(OUT, 'downloads');
 fs.rmSync(DL, { recursive: true, force: true });
 fs.mkdirSync(DL, { recursive: true });
+// Se prueba una copia de la extensión: para conceder el acceso a los sitios hay que
+// cambiar su manifiesto un momento (ver site-access.mjs).
+const EXT = copyExtension(path.join(ROOT, 'extension'), path.join(OUT, 'extension'));
+const ALL_SITES = { origins: ['<all_urls>'] };
 
 const results = [];
 const check = (name, ok, detail = '') => {
@@ -76,13 +80,31 @@ try {
 
   const welcome = await waitFor(async () => (await browser.pages()).find((p) => p.url().includes('options.html')), { timeout: 6000 });
   check('Se abre el editor de bienvenida al instalar', !!welcome);
-  const ctl = welcome || (await browser.newPage());
+  let ctl = welcome || (await browser.newPage());
   if (!welcome) await ctl.goto(`chrome-extension://${extId}/options.html`);
   await ctl.waitForSelector('#grid .key');
   const editorKeys = await ctl.$$eval('#grid .key:not(.add)', (n) => n.length);
   check('El editor muestra el deck de ejemplo', editorKeys === 12, `${editorKeys} botones en la primera página`);
 
   const sw = (msg) => ctl.evaluate((m) => chrome.runtime.sendMessage({ to: 'sw', ...m }), msg);
+  const siteAccess = () => ctl.evaluate((p) => chrome.permissions.contains(p), ALL_SITES);
+  // Estado del acceso a los sitios en el editor: textos del aviso de bienvenida y de Ajustes › General.
+  const accessUi = () => ctl.evaluate(() => ({
+    welcome: document.querySelector('#acceso [data-access="state"]').textContent,
+    welcomeGrant: !document.querySelector('#acceso [data-access="grant"]').hidden,
+    row: document.querySelector('#access-row [data-access="state"]').textContent,
+    rowGrant: !document.querySelector('#access-row [data-access="grant"]').hidden,
+    rowRemove: !document.querySelector('#access-row [data-access="remove"]').hidden,
+  }));
+
+  // ---------- acceso a los sitios: opcional, se pide en tiempo de ejecución
+  const manifest = await ctl.evaluate(() => chrome.runtime.getManifest());
+  check('Manifiesto sin host_permissions, con activeTab y acceso opcional',
+    !manifest.host_permissions && manifest.permissions.includes('activeTab') && manifest.optional_host_permissions?.includes('<all_urls>'),
+    `versión ${manifest.version}`);
+  check('Al instalar no hay acceso a los sitios', !(await siteAccess()));
+  let ui = await waitFor(async () => { const u = await accessUi(); return u.welcome ? u : null; }, { timeout: 4000 });
+  check('La bienvenida pide «Permitir en todos los sitios»', ui?.welcome === 'Sin acceso a los sitios' && ui.welcomeGrant && ui.rowGrant && !ui.rowRemove, JSON.stringify(ui));
 
   // Instalación nueva: el deck de ejemplo debe quedar guardado (ids estables), si no el
   // celular recibiría ids que la extensión no reconoce.
@@ -92,6 +114,16 @@ try {
     return (await getDeck()).pages[0].keys.map((k) => k.id).join(',');
   });
   check('El deck de ejemplo queda guardado al instalar', !!firstIds && firstIds === sameIds);
+
+  // Conceder el acceso recarga la extensión: se cierra el editor y se vuelve a abrir.
+  await grantSiteAccess(browser, EXT);
+  ctl = await browser.newPage();
+  await ctl.goto(`chrome-extension://${extId}/options.html`);
+  await ctl.waitForSelector('#grid .key');
+  check('Acceso a los sitios concedido con el manifiesto real',
+    (await siteAccess()) && !(await ctl.evaluate(() => chrome.runtime.getManifest().host_permissions)));
+  ui = await waitFor(async () => { const u = await accessUi(); return u.row === 'Permitido en todos los sitios' ? u : null; }, { timeout: 4000 });
+  check('El editor muestra el acceso concedido', ui && !ui.welcomeGrant && !ui.rowGrant && ui.rowRemove, JSON.stringify(ui));
 
   // ---------- deck de prueba + OBS
   await ctl.evaluate(async () => {
@@ -365,6 +397,45 @@ try {
   });
   const relabel = await phone.waitForFunction(() => document.querySelector('.key[data-id="kshot"] .label')?.textContent === 'Foto', { timeout: 6000 }).then(() => true, () => false);
   check('Los cambios del editor llegan al celular al instante', relabel);
+
+  // ---------- sin acceso a los sitios
+  await page.bringToFront();
+  await ctl.$eval('#access-row [data-access="remove"]', (b) => b.click());
+  check('«Quitar acceso» quita el permiso', !!(await waitFor(async () => !(await siteAccess()), { timeout: 4000 })));
+  ui = await waitFor(async () => { const u = await accessUi(); return u.row === 'Sin acceso a los sitios' ? u : null; }, { timeout: 4000 });
+  check('El editor vuelve a ofrecer el permiso', ui && ui.welcomeGrant && ui.rowGrant && !ui.rowRemove, JSON.stringify(ui));
+  const noAccess = /Permite el acceso a los sitios en el panel de Botonazo/;
+  const targetWarn = await waitFor(async () => phone.$eval('#target', (el) => el.classList.contains('warn') && el.textContent), { timeout: 4000 });
+  check('El celular avisa que falta el acceso en la pestaña controlada', noAccess.test(targetWarn || ''), targetWarn || '');
+  r = await press('kshot');
+  check('Sin acceso: la captura pide permitir el acceso', !r.ok && noAccess.test(r.msg), r.msg);
+  r = await press('kmsg');
+  check('Sin acceso: el cartel pide permitir el acceso', !r.ok && noAccess.test(r.msg), r.msg);
+  r = await press('kplay');
+  check('Sin acceso: la multimedia pide permitir el acceso', !r.ok && noAccess.test(r.msg), r.msg);
+  r = await press('khook');
+  check('Sin acceso: el webhook pide permitir el acceso', !r.ok && noAccess.test(r.msg), r.msg);
+  r = await press('kzoom0');
+  check('Sin acceso: las acciones de Chrome siguen funcionando (zoom)', r.ok, r.msg);
+  await phone.evaluate(() => [...document.querySelectorAll('.key')].find((el) => el.querySelector('.label').textContent === 'Pestañas').click());
+  const hiddenTabs = await phone.waitForFunction(() => {
+    const note = document.querySelector('#tab-list .tabs-note')?.textContent;
+    const titles = [...document.querySelectorAll('#tab-list .tab-title')].map((n) => n.textContent);
+    return note && titles.length >= 3 ? { note, titles } : null;
+  }, { timeout: 8000 }).then((h) => h.jsonValue(), () => null);
+  check('Sin acceso: la lista de pestañas avisa y numera las pestañas',
+    noAccess.test(hiddenTabs?.note || '') && hiddenTabs.titles.some((x) => /^Pestaña \d+$/.test(x)) && !hiddenTabs.titles.some((x) => /Página de prueba/.test(x)),
+    hiddenTabs?.titles.join(' · ') || '');
+  await phone.evaluate(() => document.querySelectorAll('dialog[open]').forEach((d) => d.close()));
+  const popup = await browser.newPage();
+  await popup.goto(`chrome-extension://${extId}/popup.html`);
+  const popupCard = await popup.waitForFunction(() => {
+    const card = document.getElementById('access');
+    return card && !card.hidden && document.getElementById('access-grant').textContent;
+  }, { timeout: 4000 }).then((h) => h.jsonValue(), () => null);
+  check('El panel muestra «Permitir en todos los sitios»', popupCard === 'Permitir en todos los sitios', popupCard || '');
+  await popup.close();
+  await page.bringToFront();
 
   // ---------- seguridad
   const intruderCtx = await browser.createBrowserContext();

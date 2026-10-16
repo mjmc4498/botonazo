@@ -1,4 +1,4 @@
-import { REMOTE_URL, buildRemoteUrl, getSettings, saveSettings } from './config.js';
+import { REMOTE_URL, buildRemoteUrl, getSettings, hasSiteAccess, requestSiteAccess, saveSettings } from './config.js';
 import { getDeck } from './deck.js';
 import qrcode from './lib/qrcode.mjs';
 import { applyI18n, t } from './lib/i18n.js';
@@ -10,6 +10,7 @@ const sw = (type, extra = {}) => chrome.runtime.sendMessage({ to: 'sw', type, ..
 const lang = 'es';
 
 let settings = await getSettings();
+let siteAccess = await hasSiteAccess();
 let snap = null;
 let renderedUrl = '';
 const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -88,12 +89,13 @@ function render() {
   }
   $('qr-card').classList.toggle('loading', state.status !== 'ready');
 
-  // Avisos
+  // Avisos (sin acceso a los sitios se muestra la tarjeta para concederlo)
   let alert = '';
   if (state.active && state.status === 'error') alert = state.error === 'network' ? t('errorNetwork') : t('errorGeneric');
-  else if (state.active && target && !target.ok) alert = t('restrictedTab');
+  else if (state.active && target?.access === 'restricted') alert = t('restrictedTab');
   $('alert').hidden = !alert;
   $('alert').textContent = alert;
+  $('access').hidden = siteAccess;
 
   // Pestaña controlada
   $('target-card').hidden = !state.active || !target;
@@ -188,6 +190,11 @@ $('reset').addEventListener('click', async () => {
   render();
 });
 
+$('access-grant').addEventListener('click', async () => {
+  siteAccess = await requestSiteAccess();
+  render();
+});
+
 $('options').addEventListener('click', () => chrome.runtime.openOptionsPage());
 
 $('edit-deck').addEventListener('click', () => {
@@ -196,6 +203,12 @@ $('edit-deck').addEventListener('click', () => {
 });
 
 chrome.storage.session.onChanged.addListener((changes) => { if (changes.state) refresh(); });
+const accessChanged = async () => {
+  siteAccess = await hasSiteAccess();
+  refresh();
+};
+chrome.permissions.onAdded.addListener(accessChanged);
+chrome.permissions.onRemoved.addListener(accessChanged);
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area === 'sync' && changes.settings) {
     getSettings().then((s) => { settings = s; render(); });

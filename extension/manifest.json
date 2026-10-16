@@ -3,7 +3,7 @@
   "name": "__MSG_extName__",
   "short_name": "Botonazo",
   "description": "__MSG_extDescription__",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Miguel Mogrovejo",
   "homepage_url": "https://mjmc4498.github.io/botonazo/",
   "default_locale": "es",
@@ -30,8 +30,8 @@
     "page": "options.html",
     "open_in_tab": true
   },
-  "permissions": ["offscreen", "scripting", "storage", "tabCapture", "downloads"],
-  "host_permissions": ["<all_urls>"],
+  "permissions": ["activeTab", "offscreen", "scripting", "storage", "tabCapture", "downloads"],
+  "optional_host_permissions": ["<all_urls>"],
   "commands": {
     "_execute_action": {
       "suggested_key": { "default": "Alt+Shift+D" },

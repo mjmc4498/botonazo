@@ -2,7 +2,7 @@
 // Coordina la sesión (documento offscreen con la conexión WebRTC), decide qué
 // pestaña se controla y ejecuta la acción de cada botón que se pulsa en el celular.
 
-import { DEFAULT_SETTINGS, ID_PREFIX, getObsPassword, getSettings } from './config.js';
+import { DEFAULT_SETTINGS, ID_PREFIX, getObsPassword, getSettings, hasSiteAccess } from './config.js';
 import { ACTIONS } from './actions.js';
 import { compileDeck, findKey, getDeck } from './deck.js';
 
@@ -169,6 +169,26 @@ function hostOf(url = '') {
   try { return new URL(url).hostname; } catch { return ''; }
 }
 
+// Sin el permiso de acceso a los sitios Chrome oculta la dirección y el título de las
+// pestañas, salvo la que recibió activeTab al abrir el panel.
+//   'ok'         → se puede capturar e insertar scripts
+//   'restricted' → página de Chrome, tienda o similar
+//   'none'       → falta el acceso a los sitios
+async function tabAccess(tab) {
+  if (tab.url != null) return isScriptable(tab.url) ? 'ok' : 'restricted';
+  return (await hasSiteAccess()) ? 'restricted' : 'none';
+}
+
+const noAccessText = () => chrome.i18n.getMessage('noSiteAccess');
+
+// Los webhooks necesitan acceso al sitio de destino: sin él, CORS bloquea la respuesta.
+async function canReach(url) {
+  let parsed;
+  try { parsed = new URL(url); } catch { return true; } // una dirección inválida falla al enviarla
+  if (!/^https?:$/.test(parsed.protocol)) return true;
+  return chrome.permissions.contains({ origins: [`${parsed.origin}/*`] }).catch(() => false);
+}
+
 // Pestaña activa de la última ventana normal enfocada (no el estudio ni el popup).
 async function activeTab() {
   const win = await chrome.windows.getLastFocused({ windowTypes: ['normal'] }).catch(() => null);
@@ -196,8 +216,11 @@ async function setTarget(tabId) {
 async function targetInfo() {
   const tab = await targetTab();
   if (!tab) return { t: 'target', title: '', host: '', ok: false };
+  const access = await tabAccess(tab);
+  // Sin acceso, el celular muestra el aviso en lugar del título (que Chrome oculta).
+  if (access === 'none') return { t: 'target', title: noAccessText(), host: '', ok: false, access: false };
   const host = hostOf(tab.url);
-  return { t: 'target', title: tab.title || host, host, ok: isScriptable(tab.url) };
+  return { t: 'target', title: tab.title || host, host, ok: access === 'ok' };
 }
 
 let targetTimer = 0;
@@ -221,6 +244,9 @@ chrome.tabs.onUpdated.addListener((tabId, info) => {
   if (tabId === state?.targetTabId && (info.title || info.url || info.mutedInfo || info.pinned !== undefined)) targetChanged();
 });
 chrome.windows.onBoundsChanged?.addListener(() => pushStates());
+// Al conceder o quitar el acceso a los sitios cambia lo que se sabe de la pestaña.
+chrome.permissions.onAdded.addListener(() => targetChanged());
+chrome.permissions.onRemoved.addListener(() => targetChanged());
 chrome.windows.onRemoved.addListener(async (windowId) => {
   const { studio } = await chrome.storage.session.get('studio');
   if (studio?.windowId === windowId) {
@@ -295,10 +321,15 @@ async function pushObsConfig() {
 class UserError extends Error {}
 const fail = (message) => { throw new UserError(message); };
 
-async function requireTab({ scriptable = false } = {}) {
+// `access`: la acción necesita acceso al sitio (captura); `scriptable`: además inserta scripts.
+async function requireTab({ scriptable = false, access = scriptable } = {}) {
   const tab = await targetTab();
   if (!tab) fail('No hay ninguna pestaña abierta.');
-  if (scriptable && !isScriptable(tab.url)) fail('Chrome no permite usar esta acción en esta página. Cambia a una pestaña normal.');
+  if (access) {
+    const level = await tabAccess(tab);
+    if (level === 'none') fail(noAccessText());
+    if (scriptable && level === 'restricted') fail('Chrome no permite usar esta acción en esta página. Cambia a una pestaña normal.');
+  }
   return tab;
 }
 
@@ -431,8 +462,11 @@ async function media(op, value) {
   audible.forEach(add);
   add(target);
   if (lastMediaTab != null) add(await chrome.tabs.get(lastMediaTab).catch(() => null));
+  let blocked = false;
   for (const tab of candidates) {
-    if (!isScriptable(tab.url)) continue;
+    const access = await tabAccess(tab);
+    if (access === 'none') blocked = true;
+    if (access !== 'ok') continue;
     const frameId = await mediaFrame(tab);
     if (frameId == null) continue;
     // Los argumentos deben ser JSON: undefined no se admite.
@@ -440,7 +474,7 @@ async function media(op, value) {
     await chrome.storage.session.set({ lastMediaTab: tab.id });
     return res?.result || {};
   }
-  fail('No hay ningún video o audio en las pestañas abiertas.');
+  fail(blocked ? noAccessText() : 'No hay ningún video o audio en las pestañas abiertas.');
 }
 
 // ---------------------------------------------------------------- acciones
@@ -460,7 +494,7 @@ async function cycleTab(dir) {
 const RUN = {
   // ---------- capturas y grabación
   async 'capture.screenshot'(a) {
-    const tab = await requireTab();
+    const tab = await requireTab({ access: true });
     if (!tab.active) {
       await chrome.tabs.update(tab.id, { active: true });
       await sleep(250);
@@ -490,7 +524,8 @@ const RUN = {
       return { msg: `Grabación guardada (${duration(res?.seconds || 0)})` };
     }
     const tab = await requireTab();
-    if (!isScriptable(tab.url)) fail('Chrome no permite grabar esta página.');
+    // tabCapture no depende del acceso a los sitios sino de haber invocado la extensión.
+    if ((await tabAccess(tab)) === 'restricted') fail('Chrome no permite grabar esta página.');
     let streamId = null;
     if (status?.tabId !== tab.id) {
       try {
@@ -709,6 +744,7 @@ const RUN = {
   },
   async 'web.webhook'(a) {
     if (!a.url) fail('Configura la dirección del webhook en el editor del deck.');
+    if (!(await canReach(a.url))) fail(noAccessText());
     const headers = {};
     for (const line of String(a.headers || '').split('\n')) {
       const i = line.indexOf(':');
@@ -767,6 +803,7 @@ let lastFrame = null;
 async function mirrorFrame() {
   const tab = await targetTab();
   if (!tab) return { error: 'No hay ninguna pestaña abierta.' };
+  if ((await tabAccess(tab)) === 'none') return { error: noAccessText() };
   const now = Date.now();
   // Varios celulares pueden pedir imágenes a la vez: se comparte la más reciente.
   if (lastFrame && lastFrame.windowId === tab.windowId && now - lastFrame.at < 450) return lastFrame.out;
@@ -792,22 +829,28 @@ async function mirrorFrame() {
 async function listTabs() {
   const wins = await chrome.windows.getAll({ populate: true, windowTypes: ['normal'] });
   const focused = (await chrome.windows.getLastFocused({ windowTypes: ['normal'] }).catch(() => null))?.id;
+  const access = await hasSiteAccess();
   const tabs = [];
   wins.forEach((w, i) => {
-    for (const t of w.tabs) {
+    w.tabs.forEach((t, n) => {
+      // Sin acceso a los sitios Chrome no da el título ni la dirección: se numera la pestaña.
+      const hidden = !access && t.url == null;
       tabs.push({
         id: t.id,
-        title: short(t.title || '', 120),
+        title: hidden ? chrome.i18n.getMessage('tabNumber', [String(n + 1)]) : short(t.title || '', 120),
         host: hostOf(t.url),
+        hidden,
         active: t.active && w.id === focused,
         audible: !!t.audible,
         muted: !!t.mutedInfo?.muted,
         pinned: !!t.pinned,
         win: i + 1,
       });
-    }
+    });
   });
-  return { t: 'tabs', tabs, windows: wins.length };
+  const out = { t: 'tabs', tabs, windows: wins.length };
+  if (!access) out.note = chrome.i18n.getMessage('tabsNoAccess');
+  return out;
 }
 
 async function handleCommand(cmd) {
@@ -910,7 +953,7 @@ async function snapshot() {
   let target = null;
   if (s.active) {
     const tab = await targetTab();
-    if (tab) target = { id: tab.id, title: tab.title, url: tab.url, favIconUrl: tab.favIconUrl, ok: isScriptable(tab.url) };
+    if (tab) target = { id: tab.id, title: tab.title, url: tab.url, favIconUrl: tab.favIconUrl, ok: isScriptable(tab.url), access: await tabAccess(tab) };
   }
   return { state: await loadState(), identity, target, follow: settings.followActiveTab };
 }
@@ -952,7 +995,7 @@ const handlers = {
     const base = { tabId: tab.id, title: tab.title || '', audio: settings.recAudio, quality: settings.recQuality };
     // Si ya se está grabando una pestaña, se muestra esa misma captura.
     if (msg.haveTabId != null) return { ...base, tabId: msg.haveTabId, reuse: true };
-    if (!isScriptable(tab.url)) return base;
+    if ((await tabAccess(tab)) === 'restricted') return base;
     try {
       return { ...base, streamId: await chrome.tabCapture.getMediaStreamId({ targetTabId: tab.id }) };
     } catch {

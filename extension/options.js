@@ -1,6 +1,6 @@
 // Botonazo — editor del deck y ajustes.
 
-import { REMOTE_URL, getObsPassword, getSettings, saveSettings } from './config.js';
+import { REMOTE_URL, SITE_ACCESS, getObsPassword, getSettings, hasSiteAccess, requestSiteAccess, saveSettings } from './config.js';
 import { ACTIONS, CATEGORIES, MAX_MACRO_DELAY, MAX_MACRO_STEPS, NOT_IN_MACRO, comboLabel, defaultParams, shortLabel } from './actions.js';
 import { COLORS, LIMITS, TEMPLATES, defaultDeck, getDeck, normalizeDeck, pageFromTemplate, saveDeck, uid } from './deck.js';
 import { ICONS, ICON_GROUPS } from './lib/icons.js';
@@ -840,6 +840,33 @@ $('obsTest').addEventListener('click', async () => {
   testObs();
 });
 
+// ---------- acceso a los sitios
+
+async function renderAccess() {
+  const granted = await hasSiteAccess();
+  $('acceso').classList.toggle('granted', granted);
+  for (const node of document.querySelectorAll('[data-access="state"]')) {
+    node.dataset.tone = granted ? 'ok' : 'warn';
+    node.querySelector('span').textContent = t(granted ? 'siteAccessOn' : 'siteAccessOff');
+  }
+  for (const node of document.querySelectorAll('[data-access="sub"]')) node.textContent = t(granted ? 'siteAccessOnSub' : 'siteAccessOffSub');
+  for (const node of document.querySelectorAll('[data-access="grant"]')) node.hidden = granted;
+  for (const node of document.querySelectorAll('[data-access="remove"]')) node.hidden = !granted;
+}
+
+for (const btn of document.querySelectorAll('[data-access="grant"]')) {
+  btn.addEventListener('click', async () => {
+    if (!(await requestSiteAccess())) toast(t('siteAccessDenied'));
+    renderAccess();
+  });
+}
+document.querySelector('[data-access="remove"]').addEventListener('click', async () => {
+  await chrome.permissions.remove(SITE_ACCESS);
+  renderAccess();
+});
+chrome.permissions.onAdded.addListener(renderAccess);
+chrome.permissions.onRemoved.addListener(renderAccess);
+
 // ---------- avanzado
 
 $('remoteUrlSave').addEventListener('click', async () => {
@@ -882,8 +909,9 @@ $('resetCode').addEventListener('click', async () => {
 // ---------------------------------------------------------------- inicio
 
 renderSettings();
+renderAccess();
 render();
 if (settings.obsEnabled) testObs({ quiet: true });
-if (location.hash === '#deck' || location.hash === '#obs') {
+if (['#deck', '#obs', '#acceso'].includes(location.hash)) {
   requestAnimationFrame(() => document.querySelector(location.hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
 }

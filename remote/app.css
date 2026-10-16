@@ -449,6 +449,14 @@ svg {
   text-transform: uppercase;
   color: var(--muted);
 }
+.tab-list .tabs-note {
+  margin: 4px 8px 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--warn) 14%, transparent);
+  font-size: 13px;
+  line-height: 1.35;
+}
 .tab-item {
   display: flex;
   align-items: center;

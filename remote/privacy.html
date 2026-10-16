@@ -36,7 +36,7 @@
     </div>
   </header>
   <section>
-    <p class="muted" style="margin-top:20px">Última actualización: 15 de octubre de 2026 (versión 1.0) · Autor: Miguel Mogrovejo</p>
+    <p class="muted" style="margin-top:20px">Última actualización: 15 de octubre de 2026 (versión 1.1) · Autor: Miguel Mogrovejo</p>
 
     <div class="card">
       <strong>En resumen:</strong> Botonazo no recopila, vende ni comparte datos personales. No usa cuentas, analítica, publicidad ni cookies. Tu celular y tu computadora se comunican de forma directa y cifrada, y tus capturas y grabaciones se guardan solo en tus dispositivos.
@@ -73,7 +73,7 @@
     </ul>
 
     <h2>Acceso a las páginas web</h2>
-    <p>La extensión pide acceso a los sitios web para ejecutar tus botones en la pestaña que estás viendo: mostrar carteles y avisos encima de la página, enviar atajos de teclado y texto, desplazarla y controlar sus videos. Los scripts de Botonazo solo se insertan en una pestaña cuando pulsas un botón que lo necesita. Botonazo no lee, guarda ni envía el contenido de las páginas.</p>
+    <p>El acceso a los sitios web es <strong>opcional</strong> y no se pide al instalar. Chrome lo solicita una sola vez cuando pulsas «Permitir en todos los sitios» en Botonazo, y puedes quitarlo cuando quieras con «Quitar acceso» (Ajustes › General) o desde <code>chrome://extensions</code>. Sirve para ejecutar tus botones en la pestaña que estás viendo aunque no toques la computadora: capturarla, mostrar carteles y avisos encima de la página, enviar atajos de teclado y texto, desplazarla, controlar sus videos, mostrar en tu celular los títulos de tus pestañas y llamar a tus webhooks. Sin este permiso, Botonazo solo puede actuar sobre la pestaña donde abriste su panel (permiso <code>activeTab</code>). Los scripts de Botonazo solo se insertan en una pestaña cuando pulsas un botón que lo necesita. Botonazo no lee, guarda ni envía el contenido de las páginas.</p>
 
     <h2>Almacenamiento local</h2>
     <ul>
@@ -83,7 +83,8 @@
 
     <h2>Permisos de la extensión</h2>
     <ul>
-      <li><strong>Acceso a los sitios web:</strong> ejecutar tus botones en la pestaña (carteles, atajos, texto, desplazamiento, video) y capturar la pestaña visible.</li>
+      <li><strong>Acceso a los sitios web (opcional, <code>&lt;all_urls&gt;</code>):</strong> solo si lo concedes con «Permitir en todos los sitios». Ejecutar tus botones en la pestaña (carteles, atajos, texto, desplazamiento, video), capturar la pestaña visible, mostrar los títulos de tus pestañas en el celular y llamar a tus webhooks.</li>
+      <li><strong>Pestaña activa (<code>activeTab</code>):</strong> usar esos botones en la pestaña donde abriste el panel de Botonazo aunque no hayas concedido el acceso a todos los sitios.</li>
       <li><strong>Captura de pestañas (<code>tabCapture</code>):</strong> grabar la pestaña y mostrarla en vivo en tu celular cuando pulsas esos botones.</li>
       <li><strong>Descargas (<code>downloads</code>):</strong> guardar tus capturas y grabaciones en la carpeta Descargas.</li>
       <li><strong>Ejecución de scripts (<code>scripting</code>):</strong> insertar los scripts de Botonazo en la pestaña solo cuando un botón lo necesita.</li>

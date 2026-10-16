@@ -488,6 +488,50 @@
   "saved": {
     "message": "Guardado"
   },
+  "siteAccessTitle": {
+    "message": "Acceso a los sitios"
+  },
+  "siteAccessBody": {
+    "message": "Para que los botones funcionen desde el celular sin tocar la computadora, Botonazo necesita permiso para leer y cambiar los sitios web. Solo lo usa cuando pulsas un botón: capturas, carteles y avisos, texto y atajos, multimedia, títulos de las pestañas y webhooks. Chrome lo pide una sola vez y puedes quitarlo cuando quieras."
+  },
+  "siteAccessOn": {
+    "message": "Permitido en todos los sitios"
+  },
+  "siteAccessOff": {
+    "message": "Sin acceso a los sitios"
+  },
+  "siteAccessOnSub": {
+    "message": "Los botones funcionan en cualquier pestaña. Botonazo solo actúa cuando pulsas un botón."
+  },
+  "siteAccessOffSub": {
+    "message": "Sin este permiso no funcionan las capturas, los carteles, el texto, los atajos, la multimedia ni los webhooks, y la lista de pestañas no muestra los títulos."
+  },
+  "siteAccessPopup": {
+    "message": "Las capturas, carteles, texto, atajos, multimedia y webhooks lo necesitan para funcionar desde el celular."
+  },
+  "siteAccessGrant": {
+    "message": "Permitir en todos los sitios"
+  },
+  "siteAccessRemove": {
+    "message": "Quitar acceso"
+  },
+  "siteAccessDenied": {
+    "message": "Chrome no concedió el acceso. Puedes intentarlo otra vez cuando quieras."
+  },
+  "noSiteAccess": {
+    "message": "Permite el acceso a los sitios en el panel de Botonazo."
+  },
+  "tabsNoAccess": {
+    "message": "Sin acceso a los sitios, Chrome no muestra los títulos de las pestañas. Permite el acceso a los sitios en el panel de Botonazo."
+  },
+  "tabNumber": {
+    "message": "Pestaña $NUMBER$",
+    "placeholders": {
+      "number": {
+        "content": "$1"
+      }
+    }
+  },
   "studioTitle": {
     "message": "Botonazo · Estudio"
   },

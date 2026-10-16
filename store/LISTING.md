@@ -8,7 +8,7 @@ Todo lo que pide el [Panel del desarrollador](https://chrome.google.com/webstore
 
 | Campo | Valor |
 |---|---|
-| Archivo para subir | `dist/botonazo-1.0.0.zip` · versión 1.0.0 |
+| Archivo para subir | `dist/botonazo-1.1.0.zip` · versión 1.1.0 |
 | Autor | Miguel Mogrovejo |
 
 > Antes de enviar a revisión publica el repositorio `botonazo` con GitHub Pages (ver README, paso 1): la extensión abre `https://mjmc4498.github.io/botonazo/` en el celular y la política de privacidad vive en esa misma dirección.
@@ -77,6 +77,7 @@ PRIVADO Y SEGURO
 • Conexión directa y cifrada de extremo a extremo (WebRTC) entre tu celular y tu computadora.
 • El celular solo envía qué botón pulsaste: las direcciones, textos y contraseñas de tus botones nunca salen de la computadora.
 • Sin cuentas, sin anuncios, sin analítica. Botonazo no recopila datos personales.
+• El acceso a los sitios es opcional: lo concedes una sola vez desde Botonazo y puedes quitarlo cuando quieras.
 • Tus capturas y videos se guardan solo en tus dispositivos.
 • Genera un código nuevo en cualquier momento para desconectar a todos.
 
@@ -148,9 +149,14 @@ Inserta los scripts de Botonazo en la pestaña solo cuando el usuario pulsa un b
 Guarda el deck que diseña el usuario, sus ajustes (formato de capturas, calidad de video, conexión con OBS) y el identificador aleatorio de la sesión para que el celular pueda reconectarse. La contraseña de OBS se guarda solo en el almacenamiento local.
 ```
 
-Permiso de host (`<all_urls>`)
+`activeTab`
 ```
-Los botones actúan sobre la pestaña que el usuario está viendo, que puede ser cualquier sitio (paneles de transmisión, YouTube, documentos, archivos locales…), a menudo con iframes de otros dominios. El acceso se usa para capturar la pestaña visible (captureVisibleTab), mostrar carteles encima de la página, simular atajos y texto, y controlar el video o audio de la pestaña, siempre a pedido del usuario. Botonazo no lee ni transmite el contenido de las páginas; solo envía al celular del usuario el título de la pestaña, la lista de pestañas cuando la pide, y las capturas o imágenes que él solicita.
+Cuando el usuario hace clic en el ícono de Botonazo (o pulsa Alt+Shift+D) se abre el panel con el código QR. activeTab permite usar los botones en esa pestaña —capturarla, mostrar carteles, enviar atajos y texto, controlar su video y mostrar su título en el celular— sin tener acceso a todos los sitios.
+```
+
+Permiso de host opcional (`optional_host_permissions`: `<all_urls>`)
+```
+No se pide al instalar: el paquete no declara host_permissions. Botonazo lo solicita en tiempo de ejecución con chrome.permissions.request, solo cuando el usuario pulsa «Permitir en todos los sitios» en la bienvenida, en Ajustes › General o en el panel del QR, junto a una explicación de para qué sirve; puede quitarlo con «Quitar acceso». Hace falta porque los botones se pulsan en el celular, sin tocar la computadora, y actúan sobre la pestaña que el usuario está viendo, que puede ser cualquier sitio (paneles de transmisión, YouTube, documentos, archivos locales…), a menudo con iframes de otros dominios; activeTab solo cubre la pestaña donde se abrió el panel y Chrome lo retira al navegar. Con este acceso Botonazo captura la pestaña visible (captureVisibleTab), muestra carteles encima de la página, simula atajos y texto, controla el video o audio de la pestaña, muestra en el celular los títulos de las pestañas abiertas y llama a los webhooks que configuró el usuario, siempre a pedido del usuario. Sin el permiso, esas acciones responden en el celular «Permite el acceso a los sitios en el panel de Botonazo» y el resto (OBS, pestañas, ventanas, grabación) sigue funcionando. Botonazo no lee ni transmite el contenido de las páginas; solo envía al celular del usuario el título de la pestaña, la lista de pestañas cuando la pide, y las capturas o imágenes que él solicita.
 ```
 
 **¿Usas código remoto?** → **No.** Todo el JavaScript va incluido en el paquete (PeerJS, el generador de QR y el cliente de OBS están en `lib/`). La conexión con el servidor de señalización de PeerJS, con OBS y con los webhooks del usuario solo intercambia datos, no código.
@@ -169,9 +175,10 @@ Y las tres certificaciones:
 
 ```
 1. Al instalar se abre el editor con un deck de ejemplo (páginas Inicio, OBS y Atajos).
-2. Abre cualquier sitio web en una pestaña y haz clic en el ícono de Botonazo: se muestra un código QR.
-3. Escanéalo con un celular, o pulsa «Copiar enlace» y ábrelo en otra ventana o dispositivo.
-4. En la página que se abre pulsa, por ejemplo, «Captura», «Volvemos pronto», «Pestañas» o «Grabar pestaña» (otra vez para detener).
+2. En el aviso «Acceso a los sitios» pulsa «Permitir en todos los sitios» y acepta el diálogo de Chrome. Es un permiso opcional: sin él, los botones que actúan sobre la página responden en el celular «Permite el acceso a los sitios en el panel de Botonazo».
+3. Abre cualquier sitio web en una pestaña y haz clic en el ícono de Botonazo: se muestra un código QR.
+4. Escanéalo con un celular, o pulsa «Copiar enlace» y ábrelo en otra ventana o dispositivo.
+5. En la página que se abre pulsa, por ejemplo, «Captura», «Volvemos pronto», «Pestañas» o «Grabar pestaña» (otra vez para detener).
 Los botones de la página OBS requieren OBS Studio con el servidor WebSocket activado (Ajustes › OBS Studio); el resto funciona sin nada más.
 No se necesita cuenta ni credenciales.
 ```

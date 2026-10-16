@@ -7,8 +7,9 @@ import { fileURLToPath } from 'node:url';
 
 import puppeteer from 'puppeteer';
 
+import { copyExtension, grantSiteAccess } from '../test/site-access.mjs';
+
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const EXT = path.join(ROOT, 'extension');
 const OUT = path.join(ROOT, 'design', 'store', 'captures');
 const BASE = process.env.BASE || 'http://localhost:8766';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -17,6 +18,8 @@ const H = 810;
 fs.mkdirSync(OUT, { recursive: true });
 
 const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'botonazo-capturas-'));
+// Copia de la extensión con el acceso a los sitios concedido (carteles y avisos en la página).
+const EXT = copyExtension(path.join(ROOT, 'extension'), `${profile}-extension`);
 const browser = await puppeteer.launch({
   headless: true,
   pipe: true,
@@ -29,6 +32,7 @@ const browser = await puppeteer.launch({
 try {
   const swT = await browser.waitForTarget((t) => t.type() === 'service_worker' && t.url().endsWith('/background.js'));
   const extId = new URL(swT.url()).host;
+  await grantSiteAccess(browser, EXT);
   await sleep(600);
 
   const desk = await browser.newPage();
@@ -162,4 +166,5 @@ im.resize((1280, 720), Image.LANCZOS).save(${JSON.stringify(path.join(ROOT, 'rem
 } finally {
   await browser.close();
   fs.rmSync(profile, { recursive: true, force: true });
+  fs.rmSync(EXT, { recursive: true, force: true });
 }
