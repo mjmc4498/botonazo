@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Botonazo · Política de privacidad</title>
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <style>
+    :root { --bg: #fff; --text: #0b0b0c; --muted: #6e6e73; --line: rgba(0,0,0,.08); --surface: #f5f5f7; color-scheme: light; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #0b0b0c; --text: #f5f5f7; --muted: #8e8e93; --line: rgba(255,255,255,.08); --surface: #161618; color-scheme: dark; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    main { max-width: 720px; margin: 0 auto; padding: 56px 20px 80px; }
+    header { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+    header img { width: 56px; height: 56px; }
+    h1 { margin: 0; font-size: 30px; letter-spacing: -.03em; line-height: 1.15; }
+    h2 { margin: 40px 0 8px; font-size: 19px; letter-spacing: -.015em; }
+    p, li { color: var(--text); }
+    .muted { color: var(--muted); }
+    .card { padding: 18px 20px; margin-top: 20px; border-radius: 14px; background: var(--surface); }
+    ul { padding-left: 20px; }
+    li + li { margin-top: 6px; }
+    code { font-size: .92em; }
+    a { color: inherit; }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="icon.svg" alt="">
+    <div>
+      <h1>Política de privacidad</h1>
+      <div class="muted">Botonazo · Tu deck de botones desde el celular</div>
+    </div>
+  </header>
+  <section>
+    <p class="muted" style="margin-top:20px">Última actualización: 15 de octubre de 2026 (versión 1.0) · Autor: Miguel Mogrovejo</p>
+
+    <div class="card">
+      <strong>En resumen:</strong> Botonazo no recopila, vende ni comparte datos personales. No usa cuentas, analítica, publicidad ni cookies. Tu celular y tu computadora se comunican de forma directa y cifrada, y tus capturas y grabaciones se guardan solo en tus dispositivos.
+    </div>
+
+    <h2>Qué hace Botonazo</h2>
+    <p>Botonazo es una extensión de Chrome que convierte tu celular en un deck de botones personalizable. Configuras los botones en la extensión y, al escanear un código QR, tu celular abre esta página web y se conecta con la extensión. Cada botón ejecuta en Chrome la acción que elegiste: capturar o grabar la pestaña, mostrar la pantalla en el celular, cambiar de pestaña o de ventana, controlar el video que suena, mostrar carteles, escribir textos, controlar OBS Studio o llamar a un webhook.</p>
+
+    <h2>Datos que no recopilamos</h2>
+    <p>Botonazo no tiene servidores propios ni base de datos. No recopilamos tu nombre, correo, historial de navegación, contenido de las páginas, capturas, grabaciones, ubicación ni ningún otro dato personal.</p>
+
+    <h2>Qué viaja entre tu computadora y tu celular</h2>
+    <p>Todo viaja por una conexión <strong>WebRTC</strong> de punto a punto entre tus dos dispositivos, cifrada de extremo a extremo (DTLS), y nunca llega al desarrollador:</p>
+    <ul>
+      <li>El diseño de tu deck (nombres, íconos y colores de los botones). Los detalles de cada acción —direcciones de webhooks, textos, contraseñas— <strong>no</strong> se envían al celular: el celular solo envía el identificador del botón pulsado y la extensión resuelve la acción.</li>
+      <li>El título de la pestaña controlada y, si abres la lista de pestañas, el título y el dominio de las pestañas abiertas.</li>
+      <li>Las capturas de pantalla que pides enviar al celular y las imágenes o el video de la pestaña cuando usas «Ver pantalla en el celular».</li>
+    </ul>
+
+    <h2>Cómo se establece la conexión</h2>
+    <ul>
+      <li>Se usa el servidor público de señalización de <a href="https://peerjs.com" rel="noopener">PeerJS</a>. Solo recibe un identificador de sesión aleatorio y los datos técnicos de red necesarios para conectar los dispositivos (por ejemplo, direcciones IP). No recibe el contenido de lo que se envía.</li>
+      <li>Si tu red impide la conexión directa, el tráfico cifrado pasa por el servidor de retransmisión (TURN) de <a href="https://www.cloudflare.com/es-es/privacypolicy/" rel="noopener">Cloudflare</a>, que no puede leerlo. Para usarlo, la extensión y el celular piden credenciales temporales a un pequeño servicio del autor alojado en Cloudflare, que no guarda ningún dato.</li>
+      <li>El código QR contiene una clave secreta que solo conocen tu computadora y los dispositivos que lo escanean. De forma predeterminada se genera un código nuevo en cada sesión, y puedes renovarlo en cualquier momento para desconectar a todos.</li>
+    </ul>
+
+    <h2>Capturas y grabaciones</h2>
+    <p>Las capturas y los videos se guardan en la carpeta <em>Descargas › Botonazo</em> de tu computadora y, si lo eliges, se envían directamente a tu celular. Botonazo no los sube a ningún servidor. La grabación de la pestaña usa el permiso de captura de Chrome y solo empieza cuando pulsas el botón; la grabación de la pantalla completa o de una ventana siempre pasa por el selector de Chrome, donde eliges qué compartir, y Chrome muestra un aviso mientras dura.</p>
+
+    <h2>OBS Studio y webhooks</h2>
+    <ul>
+      <li>Si activas el control de OBS, la extensión se conecta al servidor WebSocket de OBS en el equipo que indiques (normalmente tu propia computadora). La contraseña se guarda solo en este equipo, en el almacenamiento local de la extensión, y no se sincroniza.</li>
+      <li>Los botones de tipo webhook envían una petición a la dirección que tú configuras, con el contenido que tú escribes, únicamente cuando pulsas el botón.</li>
+    </ul>
+
+    <h2>Acceso a las páginas web</h2>
+    <p>La extensión pide acceso a los sitios web para ejecutar tus botones en la pestaña que estás viendo: mostrar carteles y avisos encima de la página, enviar atajos de teclado y texto, desplazarla y controlar sus videos. Los scripts de Botonazo solo se insertan en una pestaña cuando pulsas un botón que lo necesita. Botonazo no lee, guarda ni envía el contenido de las páginas.</p>
+
+    <h2>Almacenamiento local</h2>
+    <ul>
+      <li><strong>En Chrome:</strong> tu deck, el identificador de sesión y la contraseña de OBS se guardan con <code>chrome.storage.local</code>. Los ajustes (formato de capturas, calidad de video, etc.) se guardan con <code>chrome.storage.sync</code> y pueden sincronizarse con tu cuenta de Chrome si tienes la sincronización activada.</li>
+      <li><strong>En el celular:</strong> el identificador de sesión, una copia del diseño de tu deck y tus preferencias se guardan en el almacenamiento local del navegador para reconectarte automáticamente. Puedes borrarlos con «Olvidar esta computadora». Las capturas recibidas solo existen mientras la página está abierta, salvo que las guardes.</li>
+    </ul>
+
+    <h2>Permisos de la extensión</h2>
+    <ul>
+      <li><strong>Acceso a los sitios web:</strong> ejecutar tus botones en la pestaña (carteles, atajos, texto, desplazamiento, video) y capturar la pestaña visible.</li>
+      <li><strong>Captura de pestañas (<code>tabCapture</code>):</strong> grabar la pestaña y mostrarla en vivo en tu celular cuando pulsas esos botones.</li>
+      <li><strong>Descargas (<code>downloads</code>):</strong> guardar tus capturas y grabaciones en la carpeta Descargas.</li>
+      <li><strong>Ejecución de scripts (<code>scripting</code>):</strong> insertar los scripts de Botonazo en la pestaña solo cuando un botón lo necesita.</li>
+      <li><strong>Documento en segundo plano (<code>offscreen</code>):</strong> mantener la conexión WebRTC con el celular, grabar el video y copiar texto al portapapeles.</li>
+      <li><strong>Almacenamiento (<code>storage</code>):</strong> guardar tu deck, tus ajustes y el identificador de sesión.</li>
+    </ul>
+
+    <h2>Cambios y contacto</h2>
+    <p>Si esta política cambia, se actualizará en esta misma página. Para dudas o sugerencias, escribe al autor, Miguel Mogrovejo, a través de <a href="https://github.com/mjmc4498" rel="noopener">github.com/mjmc4498</a>.</p>
+  </section>
+
+</main>
+</body>
+</html>

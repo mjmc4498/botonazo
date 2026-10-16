@@ -1,0 +1,544 @@
+{
+  "extName": {
+    "message": "Botonazo: tu deck de botones desde el celular"
+  },
+  "extDescription": {
+    "message": "Crea tu deck de botones y úsalo desde el celular: capturas, grabación, OBS, pestañas, ventanas, multimedia, atajos y macros."
+  },
+  "actionTitle": {
+    "message": "Botonazo — abre tu deck en el celular"
+  },
+  "cmdOpen": {
+    "message": "Mostrar el código QR de Botonazo"
+  },
+  "toastConnected": {
+    "message": "$NAME$ conectado a Botonazo",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "qrAlt": {
+    "message": "Código QR para abrir tu deck en el celular"
+  },
+  "scanTitle": {
+    "message": "Escanea con la cámara de tu celular"
+  },
+  "scanBody": {
+    "message": "Tu deck se abre en el navegador del celular. No necesitas instalar nada."
+  },
+  "stoppedTitle": {
+    "message": "Sesión detenida"
+  },
+  "stoppedBody": {
+    "message": "Inicia una sesión para mostrar el código y conectar tu celular."
+  },
+  "start": {
+    "message": "Iniciar sesión"
+  },
+  "stop": {
+    "message": "Detener sesión"
+  },
+  "settings": {
+    "message": "Ajustes"
+  },
+  "controlling": {
+    "message": "Controlando"
+  },
+  "useThisTab": {
+    "message": "Controlar esta pestaña"
+  },
+  "devicesTitle": {
+    "message": "Dispositivos conectados"
+  },
+  "connected": {
+    "message": "Conectado"
+  },
+  "disconnect": {
+    "message": "Desconectar"
+  },
+  "justNow": {
+    "message": "ahora"
+  },
+  "followActive": {
+    "message": "Seguir la pestaña activa"
+  },
+  "followActiveSub": {
+    "message": "Los botones actúan sobre la pestaña que estés viendo. Desactívalo para fijar una pestaña."
+  },
+  "copyLink": {
+    "message": "Copiar enlace"
+  },
+  "copyLinkTitle": {
+    "message": "Copiar el enlace del deck para abrirlo en otro dispositivo"
+  },
+  "copied": {
+    "message": "Copiado"
+  },
+  "copyFailed": {
+    "message": "No se pudo copiar"
+  },
+  "newCode": {
+    "message": "Nuevo código"
+  },
+  "newCodeTitle": {
+    "message": "Generar un código nuevo y desconectar todos los dispositivos"
+  },
+  "newCodeConfirm": {
+    "message": "¿Confirmar?"
+  },
+  "newCodeDone": {
+    "message": "Código renovado"
+  },
+  "statusStarting": {
+    "message": "Iniciando…"
+  },
+  "statusStopped": {
+    "message": "Detenido"
+  },
+  "statusConnecting": {
+    "message": "Conectando…"
+  },
+  "statusReady": {
+    "message": "Listo para escanear"
+  },
+  "statusOffline": {
+    "message": "Sin conexión"
+  },
+  "statusConnectedOne": {
+    "message": "1 celular conectado"
+  },
+  "statusConnectedMany": {
+    "message": "$COUNT$ celulares conectados",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "errorNetwork": {
+    "message": "No se pudo conectar con el servidor. Revisa tu conexión a internet; Botonazo seguirá reintentando."
+  },
+  "errorGeneric": {
+    "message": "No se pudo iniciar la conexión. Cierra este panel y vuelve a abrirlo."
+  },
+  "restrictedTab": {
+    "message": "Chrome no permite usar extensiones en esta página. Algunos botones no funcionarán aquí: cambia a una pestaña normal."
+  },
+  "editDeck": {
+    "message": "Editar mi deck"
+  },
+  "deckSummary": {
+    "message": "$KEYS$ botones · $PAGES$ páginas",
+    "placeholders": {
+      "keys": {
+        "content": "$1"
+      },
+      "pages": {
+        "content": "$2"
+      }
+    }
+  },
+  "optionsTitle": {
+    "message": "Botonazo · Tu deck"
+  },
+  "heroSubtitle": {
+    "message": "Tu propio deck de botones en el celular: captura, graba, transmite con OBS, cambia de pestaña o de ventana, controla la música y lanza tus atajos con un toque."
+  },
+  "step1Title": {
+    "message": "Diseña tu deck"
+  },
+  "step1Body": {
+    "message": "Elige qué hace cada botón, su ícono y su color. Puedes tener varias páginas y crear macros."
+  },
+  "step2Title": {
+    "message": "Escanea el código"
+  },
+  "step2Body": {
+    "message": "Haz clic en el ícono de Botonazo (o pulsa <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd>) y escanea el QR con la cámara del celular."
+  },
+  "step3Title": {
+    "message": "¡Dale al botonazo!"
+  },
+  "step3Body": {
+    "message": "Tu deck aparece en el celular. Cada toque se ejecuta al instante en Chrome por una conexión directa y cifrada."
+  },
+  "deckTitle": {
+    "message": "Tu deck"
+  },
+  "columnsTitle": {
+    "message": "Columnas del deck"
+  },
+  "addPage": {
+    "message": "Agregar página"
+  },
+  "export": {
+    "message": "Exportar"
+  },
+  "exportTitle": {
+    "message": "Descargar el deck como archivo JSON"
+  },
+  "import": {
+    "message": "Importar"
+  },
+  "importTitle": {
+    "message": "Cargar un deck desde un archivo JSON"
+  },
+  "resetDeck": {
+    "message": "Restablecer"
+  },
+  "resetDeckTitle": {
+    "message": "Volver al deck de ejemplo"
+  },
+  "resetConfirm": {
+    "message": "¿Reemplazar tu deck por el deck de ejemplo? Perderás los cambios."
+  },
+  "importConfirm": {
+    "message": "¿Reemplazar tu deck por el del archivo?"
+  },
+  "importError": {
+    "message": "El archivo no es un deck de Botonazo válido."
+  },
+  "imported": {
+    "message": "Deck importado"
+  },
+  "phoneConnected": {
+    "message": "Conectado"
+  },
+  "dragHint": {
+    "message": "Toca un botón para editarlo · arrástralo para cambiar su lugar o suéltalo sobre otra página."
+  },
+  "addKey": {
+    "message": "Agregar botón"
+  },
+  "toggleBadge": {
+    "message": "Interruptor: se ilumina en el celular cuando está activo"
+  },
+  "limitPages": {
+    "message": "Máximo $N$ páginas",
+    "placeholders": {
+      "n": {
+        "content": "$1"
+      }
+    }
+  },
+  "limitKeys": {
+    "message": "Máximo $N$ botones por página",
+    "placeholders": {
+      "n": {
+        "content": "$1"
+      }
+    }
+  },
+  "limitSteps": {
+    "message": "Máximo $N$ pasos por macro",
+    "placeholders": {
+      "n": {
+        "content": "$1"
+      }
+    }
+  },
+  "movedTo": {
+    "message": "Movido a «$PAGE$»",
+    "placeholders": {
+      "page": {
+        "content": "$1"
+      }
+    }
+  },
+  "inspKey": {
+    "message": "Botón"
+  },
+  "inspPage": {
+    "message": "Página"
+  },
+  "fieldLabel": {
+    "message": "Nombre"
+  },
+  "fieldAction": {
+    "message": "Acción"
+  },
+  "fieldIcon": {
+    "message": "Ícono"
+  },
+  "fieldColor": {
+    "message": "Color"
+  },
+  "icons": {
+    "message": "Íconos"
+  },
+  "emoji": {
+    "message": "Emoji"
+  },
+  "iconSearch": {
+    "message": "Buscar ícono…"
+  },
+  "iconNone": {
+    "message": "No hay íconos con ese nombre"
+  },
+  "emojiPlaceholder": {
+    "message": "Escribe o pega un emoji"
+  },
+  "required": {
+    "message": "Este campo es obligatorio."
+  },
+  "invalidUrl": {
+    "message": "Escribe una dirección que empiece por https://"
+  },
+  "comboListen": {
+    "message": "Pulsa la combinación…"
+  },
+  "comboEmpty": {
+    "message": "Haz clic para grabar el atajo"
+  },
+  "clear": {
+    "message": "Borrar"
+  },
+  "choosePage": {
+    "message": "Elige una página"
+  },
+  "noOtherPages": {
+    "message": "Primero crea otra página"
+  },
+  "macroSteps": {
+    "message": "Pasos"
+  },
+  "addStep": {
+    "message": "Agregar paso"
+  },
+  "stepDelay": {
+    "message": "Esperar antes"
+  },
+  "moveUp": {
+    "message": "Subir"
+  },
+  "moveDown": {
+    "message": "Bajar"
+  },
+  "moveLeft": {
+    "message": "Mover a la izquierda"
+  },
+  "moveRight": {
+    "message": "Mover a la derecha"
+  },
+  "remove": {
+    "message": "Quitar"
+  },
+  "moveToPage": {
+    "message": "Mover a…"
+  },
+  "deleteKey": {
+    "message": "Eliminar"
+  },
+  "deletePage": {
+    "message": "Eliminar página"
+  },
+  "duplicate": {
+    "message": "Duplicar"
+  },
+  "duplicatePage": {
+    "message": "Duplicar página"
+  },
+  "confirm": {
+    "message": "¿Seguro?"
+  },
+  "pageName": {
+    "message": "Nombre de la página"
+  },
+  "pageHint": {
+    "message": "$KEYS$ de $MAX$ botones. Toca un botón para editarlo o el + para agregar uno.",
+    "placeholders": {
+      "keys": {
+        "content": "$1"
+      },
+      "max": {
+        "content": "$2"
+      }
+    }
+  },
+  "secCapture": {
+    "message": "Capturas y grabación"
+  },
+  "shotFormat": {
+    "message": "Formato de las capturas"
+  },
+  "shotFormatSub": {
+    "message": "PNG conserva todos los detalles; JPG ocupa menos."
+  },
+  "shotFlash": {
+    "message": "Destello al capturar"
+  },
+  "shotFlashSub": {
+    "message": "Un destello breve en la pantalla confirma la captura."
+  },
+  "recFormat": {
+    "message": "Formato de los videos"
+  },
+  "recFormatSub": {
+    "message": "MP4 se abre en cualquier equipo. Si tu Chrome no lo admite se usa WebM."
+  },
+  "recQuality": {
+    "message": "Calidad máxima de grabación"
+  },
+  "recAudio": {
+    "message": "Grabar el sonido"
+  },
+  "recAudioSub": {
+    "message": "Incluye el audio de la pestaña (o del sistema, si lo eliges en el estudio)."
+  },
+  "secObs": {
+    "message": "OBS Studio"
+  },
+  "obsEnabled": {
+    "message": "Controlar OBS Studio"
+  },
+  "obsEnabledSub": {
+    "message": "Transmite, graba y cambia de escena desde tu deck. En OBS abre <b>Herramientas › Ajustes del servidor WebSocket</b>, activa el servidor y copia aquí el puerto y la contraseña."
+  },
+  "obsHost": {
+    "message": "Equipo"
+  },
+  "obsPort": {
+    "message": "Puerto"
+  },
+  "obsPassword": {
+    "message": "Contraseña"
+  },
+  "obsTest": {
+    "message": "Probar conexión"
+  },
+  "obsTesting": {
+    "message": "Conectando con OBS…"
+  },
+  "obsOk": {
+    "message": "Conectado a OBS $VERSION$ · $SCENES$ escenas y $INPUTS$ fuentes disponibles en el editor.",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      },
+      "scenes": {
+        "content": "$2"
+      },
+      "inputs": {
+        "content": "$3"
+      }
+    }
+  },
+  "secGeneral": {
+    "message": "General"
+  },
+  "showToasts": {
+    "message": "Avisos en pantalla"
+  },
+  "showToastsSub": {
+    "message": "Muestra un aviso discreto en Chrome cuando un celular se conecta."
+  },
+  "newCodeEachSession": {
+    "message": "Código nuevo en cada sesión"
+  },
+  "newCodeEachSessionSub": {
+    "message": "Más seguro: el QR cambia cada vez que inicias una sesión. Si lo desactivas, el código se mantiene y tu celular se reconecta solo."
+  },
+  "autoStart": {
+    "message": "Iniciar con Chrome"
+  },
+  "autoStartSub": {
+    "message": "La sesión queda lista al abrir Chrome."
+  },
+  "shortcut": {
+    "message": "Atajo de teclado"
+  },
+  "shortcutSub": {
+    "message": "Puedes cambiarlo en chrome://extensions/shortcuts."
+  },
+  "shortcutNone": {
+    "message": "Sin asignar"
+  },
+  "secAdvanced": {
+    "message": "Avanzado"
+  },
+  "remoteUrl": {
+    "message": "Dirección del deck en el celular"
+  },
+  "remoteUrlSub": {
+    "message": "Página que se abre en el celular. Déjala vacía para usar la predeterminada."
+  },
+  "remoteUrlDefault": {
+    "message": "Se usará la dirección predeterminada."
+  },
+  "remoteUrlSaved": {
+    "message": "Dirección guardada. Abre el panel de Botonazo para ver el nuevo código."
+  },
+  "remoteUrlInvalid": {
+    "message": "Escribe una dirección https:// válida."
+  },
+  "save": {
+    "message": "Guardar"
+  },
+  "newCodeSub": {
+    "message": "Desconecta todos los celulares y genera un código QR distinto."
+  },
+  "madeBy": {
+    "message": "Creado por Miguel Mogrovejo"
+  },
+  "privacy": {
+    "message": "Privacidad"
+  },
+  "saved": {
+    "message": "Guardado"
+  },
+  "studioTitle": {
+    "message": "Botonazo · Estudio"
+  },
+  "studioReady": {
+    "message": "Listo"
+  },
+  "studioRecording": {
+    "message": "Grabando"
+  },
+  "studioSaved": {
+    "message": "Guardado"
+  },
+  "studioIdleTitle": {
+    "message": "¿Qué quieres grabar?"
+  },
+  "studioIdleBody": {
+    "message": "Elige toda la pantalla, una ventana o una pestaña. Podrás detener la grabación desde tu celular."
+  },
+  "studioAudio": {
+    "message": "Grabar el sonido"
+  },
+  "studioChoose": {
+    "message": "Elegir qué grabar"
+  },
+  "studioRecTitle": {
+    "message": "Grabando…"
+  },
+  "studioRecBody": {
+    "message": "Pulsa otra vez el botón en tu celular, o aquí, para detener y guardar."
+  },
+  "studioStop": {
+    "message": "Detener y guardar"
+  },
+  "studioSavedTitle": {
+    "message": "Video guardado"
+  },
+  "studioSavedBody": {
+    "message": "Duración $TIME$. Está en Descargas › Botonazo.",
+    "placeholders": {
+      "time": {
+        "content": "$1"
+      }
+    }
+  },
+  "studioAgain": {
+    "message": "Grabar otra vez"
+  },
+  "studioClose": {
+    "message": "Cerrar"
+  },
+  "studioError": {
+    "message": "No se pudo grabar. Vuelve a intentarlo."
+  }
+}

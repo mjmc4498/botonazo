@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="optionsTitle">Botonazo</title>
+  <link rel="icon" href="icons/icon-32.png">
+  <link rel="stylesheet" href="ui.css">
+  <link rel="stylesheet" href="options.css">
+  <script src="options.js" type="module"></script>
+</head>
+<body>
+  <div class="page">
+    <header class="hero" id="bienvenida">
+      <img src="icons/icon-128.png" width="88" height="88" alt="">
+      <div>
+        <h1>Botonazo</h1>
+        <p class="muted" data-i18n="heroSubtitle"></p>
+      </div>
+    </header>
+
+    <section class="steps">
+      <article>
+        <span class="step-n">1</span>
+        <h3 data-i18n="step1Title"></h3>
+        <p class="muted" data-i18n="step1Body"></p>
+      </article>
+      <article>
+        <span class="step-n">2</span>
+        <h3 data-i18n="step2Title"></h3>
+        <p class="muted" data-i18n-html="step2Body"></p>
+      </article>
+      <article>
+        <span class="step-n">3</span>
+        <h3 data-i18n="step3Title"></h3>
+        <p class="muted" data-i18n="step3Body"></p>
+      </article>
+    </section>
+
+    <!-- Editor del deck -->
+    <section class="editor" id="deck">
+      <div class="ed-head">
+        <h2 data-i18n="deckTitle"></h2>
+        <div class="ed-tools">
+          <div class="segmented" id="cols" data-i18n-title="columnsTitle">
+            <button data-value="3">3</button>
+            <button data-value="4">4</button>
+            <button data-value="5">5</button>
+          </div>
+          <label class="btn menu-btn">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            <span data-i18n="addPage"></span>
+            <select id="add-page" data-i18n-aria="addPage"></select>
+          </label>
+          <button class="btn ghost" id="export" data-i18n-title="exportTitle">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+            <span data-i18n="export"></span>
+          </button>
+          <button class="btn ghost" id="import" data-i18n-title="importTitle">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+            <span data-i18n="import"></span>
+          </button>
+          <input type="file" id="import-file" accept="application/json,.json" hidden>
+          <button class="btn ghost" id="reset-deck" data-i18n-title="resetDeckTitle">
+            <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            <span data-i18n="resetDeck"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="ed-body">
+        <div class="phone-col">
+          <div class="phone">
+            <div class="ph-screen">
+              <div class="ph-top">
+                <span class="ph-status"><i></i><span data-i18n="phoneConnected"></span></span>
+                <span class="ph-logo"><img src="icons/icon-32.png" width="18" height="18" alt="">Botonazo</span>
+              </div>
+              <div class="ph-grid" id="grid"></div>
+              <nav class="ph-pages" id="pages"></nav>
+            </div>
+          </div>
+          <p class="muted small center" data-i18n="dragHint"></p>
+        </div>
+
+        <aside class="inspector" id="inspector"></aside>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2 data-i18n="secCapture"></h2>
+      <div class="panel">
+        <div class="row">
+          <div>
+            <div class="row-title" data-i18n="shotFormat"></div>
+            <div class="row-sub muted" data-i18n="shotFormatSub"></div>
+          </div>
+          <div class="segmented" id="shotFormat">
+            <button data-value="png">PNG</button>
+            <button data-value="jpeg">JPG</button>
+          </div>
+        </div>
+        <label class="row">
+          <div>
+            <div class="row-title" data-i18n="shotFlash"></div>
+            <div class="row-sub muted" data-i18n="shotFlashSub"></div>
+          </div>
+          <input type="checkbox" class="switch" id="shotFlash">
+        </label>
+        <div class="row">
+          <div>
+            <div class="row-title" data-i18n="recFormat"></div>
+            <div class="row-sub muted" data-i18n="recFormatSub"></div>
+          </div>
+          <div class="segmented" id="recFormat">
+            <button data-value="mp4">MP4</button>
+            <button data-value="webm">WebM</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="row-title" data-i18n="recQuality"></div>
+          <div class="segmented" id="recQuality">
+            <button data-value="720">720p</button>
+            <button data-value="1080">1080p</button>
+          </div>
+        </div>
+        <label class="row">
+          <div>
+            <div class="row-title" data-i18n="recAudio"></div>
+            <div class="row-sub muted" data-i18n="recAudioSub"></div>
+          </div>
+          <input type="checkbox" class="switch" id="recAudio">
+        </label>
+      </div>
+    </section>
+
+    <section class="group" id="obs">
+      <h2 data-i18n="secObs"></h2>
+      <div class="panel">
+        <label class="row">
+          <div>
+            <div class="row-title" data-i18n="obsEnabled"></div>
+            <div class="row-sub muted" data-i18n-html="obsEnabledSub"></div>
+          </div>
+          <input type="checkbox" class="switch" id="obsEnabled">
+        </label>
+        <div class="row stack" id="obs-fields">
+          <div class="obs-grid">
+            <label class="field">
+              <span data-i18n="obsHost"></span>
+              <input type="text" id="obsHost" spellcheck="false" autocomplete="off" placeholder="localhost">
+            </label>
+            <label class="field">
+              <span data-i18n="obsPort"></span>
+              <input type="number" id="obsPort" min="1" max="65535" placeholder="4455">
+            </label>
+            <label class="field">
+              <span data-i18n="obsPassword"></span>
+              <input type="password" id="obsPassword" autocomplete="off" spellcheck="false">
+            </label>
+          </div>
+          <div class="inline">
+            <button class="btn" id="obsTest" data-i18n="obsTest"></button>
+            <p class="field-msg" id="obsMsg"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2 data-i18n="secGeneral"></h2>
+      <div class="panel">
+        <label class="row">
+          <div>
+            <div class="row-title" data-i18n="followActive"></div>
+            <div class="row-sub muted" data-i18n="followActiveSub"></div>
+          </div>
+          <input type="checkbox" class="switch" id="followActiveTab">
+        </label>
+        <label class="row">
+          <div>
+            <div class="row-title" data-i18n="showToasts"></div>
+            <div class="row-sub muted" data-i18n="showToastsSub"></div>
+          </div>
+          <input type="checkbox" class="switch" id="showToasts">
+        </label>
+        <label class="row">
+          <div>
+            <div class="row-title" data-i18n="newCodeEachSession"></div>
+            <div class="row-sub muted" data-i18n="newCodeEachSessionSub"></div>
+          </div>
+          <input type="checkbox" class="switch" id="newCodeEachSession">
+        </label>
+        <label class="row">
+          <div>
+            <div class="row-title" data-i18n="autoStart"></div>
+            <div class="row-sub muted" data-i18n="autoStartSub"></div>
+          </div>
+          <input type="checkbox" class="switch" id="autoStart">
+        </label>
+        <div class="row">
+          <div>
+            <div class="row-title" data-i18n="shortcut"></div>
+            <div class="row-sub muted" data-i18n="shortcutSub"></div>
+          </div>
+          <kbd id="shortcut">Alt+Shift+D</kbd>
+        </div>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2 data-i18n="secAdvanced"></h2>
+      <div class="panel">
+        <div class="row stack">
+          <div>
+            <div class="row-title" data-i18n="remoteUrl"></div>
+            <div class="row-sub muted" data-i18n="remoteUrlSub"></div>
+          </div>
+          <div class="inline">
+            <input type="url" id="remoteUrl" spellcheck="false" autocomplete="off">
+            <button class="btn" id="remoteUrlSave" data-i18n="save"></button>
+          </div>
+          <p class="field-msg" id="remoteUrlMsg"></p>
+        </div>
+        <div class="row">
+          <div>
+            <div class="row-title" data-i18n="newCode"></div>
+            <div class="row-sub muted" data-i18n="newCodeSub"></div>
+          </div>
+          <button class="btn danger" id="resetCode" data-i18n="newCode"></button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <span>Botonazo <span id="version"></span></span>
+      <span>·</span>
+      <span data-i18n="madeBy"></span>
+      <span>·</span>
+      <a id="privacy" target="_blank" rel="noopener" data-i18n="privacy"></a>
+    </footer>
+  </div>
+
+  <datalist id="obs-scenes"></datalist>
+  <datalist id="obs-inputs"></datalist>
+  <div class="saved" id="saved" data-i18n="saved"></div>
+</body>
+</html>

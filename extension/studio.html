@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="studioTitle">Botonazo</title>
+  <link rel="icon" href="icons/icon-32.png">
+  <link rel="stylesheet" href="ui.css">
+  <link rel="stylesheet" href="studio.css">
+  <script src="studio.js" type="module"></script>
+</head>
+<body data-state="idle">
+  <header class="bar">
+    <div class="brand">
+      <img src="icons/icon-32.png" width="22" height="22" alt="">
+      <span data-i18n="studioTitle"></span>
+    </div>
+    <span class="pill" id="pill" data-tone="muted"><i></i><span id="pill-text" data-i18n="studioReady"></span></span>
+  </header>
+
+  <main>
+    <div class="screen">
+      <video id="preview" muted playsinline></video>
+      <div class="screen-empty">
+        <svg viewBox="0 0 24 24"><path d="M13 3H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-3"/><path d="M8 21h8M12 17v4"/><path d="m17 8 5-5M17 3h5v5"/></svg>
+      </div>
+      <div class="rec-badge"><i></i><span id="clock">0:00</span></div>
+    </div>
+
+    <section class="idle">
+      <h1 data-i18n="studioIdleTitle"></h1>
+      <p class="muted" data-i18n="studioIdleBody"></p>
+      <label class="toggle-row">
+        <span data-i18n="studioAudio"></span>
+        <input type="checkbox" class="switch" id="audio">
+      </label>
+      <button class="btn primary big" id="choose" data-i18n="studioChoose"></button>
+    </section>
+
+    <section class="recording">
+      <h1 data-i18n="studioRecTitle"></h1>
+      <p class="muted" data-i18n="studioRecBody"></p>
+      <button class="btn stop big" id="stop">
+        <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+        <span data-i18n="studioStop"></span>
+      </button>
+    </section>
+
+    <section class="saved">
+      <h1 data-i18n="studioSavedTitle"></h1>
+      <p class="muted" id="saved-body"></p>
+      <div class="row-btns">
+        <button class="btn" id="again" data-i18n="studioAgain"></button>
+        <button class="btn primary" id="close" data-i18n="studioClose"></button>
+      </div>
+    </section>
+
+    <p class="alert" id="alert" hidden></p>
+  </main>
+</body>
+</html>
