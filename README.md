@@ -23,7 +23,7 @@ capturas, grabación, OBS, pestañas, ventanas, multimedia, atajos, webhooks y m
 | **Deck a tu medida** | 46 acciones, 103 íconos o cualquier emoji, 12 colores, hasta 12 páginas de 40 botones, macros de hasta 20 pasos con pausas, botones para saltar entre páginas, importar/exportar en JSON y 3, 4 o 5 columnas. |
 | **Conexión** | WebRTC directo y cifrado; retransmisión de Cloudflare para redes restrictivas; reconexión automática; código QR nuevo en cada sesión; varios celulares a la vez; vibración y pantalla siempre encendida en el celular. |
 
-Probado de principio a fin con **63 comprobaciones automáticas** (extensión + celular reales conectados por PeerJS, OBS simulado, grabación real de la pestaña y video en vivo).
+Probado de principio a fin con **64 comprobaciones automáticas** (extensión + celular reales conectados por PeerJS, OBS simulado, grabación real de la pestaña y video en vivo).
 
 ## Cómo funciona
 
@@ -146,7 +146,7 @@ Para un `.crx` instalable fuera de la tienda: `./scripts/build.sh --crx` (la cla
 ```bash
 npm install                 # Puppeteer y ws (solo para pruebas y capturas)
 npm run serve               # servidor local en http://localhost:8766 (otra terminal)
-npm run test:e2e            # prueba completa extensión ↔ celular ↔ OBS simulado (63 comprobaciones)
+npm run test:e2e            # prueba completa extensión ↔ celular ↔ OBS simulado (64 comprobaciones)
 npm run icons               # regenera íconos y favicon desde design/*.svg
 npm run demo-deck           # regenera remote/demo-deck.json
 npm run store:capture       # capturas reales de la extensión

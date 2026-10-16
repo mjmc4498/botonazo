@@ -84,6 +84,15 @@ try {
 
   const sw = (msg) => ctl.evaluate((m) => chrome.runtime.sendMessage({ to: 'sw', ...m }), msg);
 
+  // Instalación nueva: el deck de ejemplo debe quedar guardado (ids estables), si no el
+  // celular recibiría ids que la extensión no reconoce.
+  const firstIds = await ctl.evaluate(async () => (await chrome.storage.local.get('deck')).deck?.pages?.[0]?.keys?.map((k) => k.id).join(','));
+  const sameIds = await ctl.evaluate(async () => {
+    const { getDeck } = await import(chrome.runtime.getURL('deck.js'));
+    return (await getDeck()).pages[0].keys.map((k) => k.id).join(',');
+  });
+  check('El deck de ejemplo queda guardado al instalar', !!firstIds && firstIds === sameIds);
+
   // ---------- deck de prueba + OBS
   await ctl.evaluate(async () => {
     const { defaultDeck, normalizeDeck } = await import(chrome.runtime.getURL('deck.js'));

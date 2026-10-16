@@ -994,6 +994,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 // ---------------------------------------------------------------- ciclo de vida
 
 chrome.runtime.onInstalled.addListener(async ({ reason }) => {
+  await getDeck(); // guarda el deck de ejemplo antes de abrir el editor
   await chrome.storage.session.set({ state: { ...EMPTY_STATE } });
   state = null;
   updateBadge();

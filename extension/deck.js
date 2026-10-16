@@ -265,9 +265,19 @@ export function compileDeck(deck) {
 
 // ---------------------------------------------------------------- almacenamiento
 
+// El deck de ejemplo se guarda la primera vez: sus ids son aleatorios y deben ser los
+// mismos en el celular y en la extensión (si no, «Este botón ya no existe»).
+let creatingDefault = null;
+
 export async function getDeck() {
   const { deck } = await chrome.storage.local.get('deck');
-  return deck ? normalizeDeck(deck) : defaultDeck();
+  if (deck) return normalizeDeck(deck);
+  creatingDefault ??= (async () => {
+    const fresh = defaultDeck();
+    await chrome.storage.local.set({ deck: fresh });
+    return fresh;
+  })();
+  return creatingDefault;
 }
 
 export async function saveDeck(deck) {

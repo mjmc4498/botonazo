@@ -350,7 +350,7 @@ for i, (t, c) in enumerate([
 s = nueva()
 cabecera(s, "Estado", "Listo para la Chrome Web Store")
 for i, (t, c) in enumerate([
-    ("63 comprobaciones", "Prueba de punta a punta con la extensión, el celular, OBS simulado, grabación y video en vivo reales."),
+    ("64 comprobaciones", "Prueba de punta a punta con la extensión, el celular, OBS simulado, grabación y video en vivo reales."),
     ("Paquete listo", "dist/botonazo-1.0.0.zip validado: manifiesto, íconos, idioma y scripts."),
     ("Ficha completa", "Textos, 5 capturas, mosaicos, privacidad y justificación de permisos."),
 ]):
